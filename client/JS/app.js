@@ -6,17 +6,19 @@ function getAllPosts(){
         .catch(console.warn)
 };
 
-// create
+// create submit
 function submitPost(e){
     e.preventDefault();
     
     const postData = {
         Title: e.target.title.value,
+        Date: e.target.date.value,
         Text: e.target.article.value,
         Emoji: e.target.emoji.value,
         Giph: e.target.giph.value,
         Id: -1,
         Comments: [],
+        Author: e.target.author.value
     };
 
     const options = { 
@@ -35,15 +37,18 @@ function submitPost(e){
 
 };
 
+// Create Comment
 function submitComment(e){
     e.preventDefault();
     
     const postData = {
         Title: e.target.title.value,
+        Date: e.target.date.value,
         Text: e.target.article.value,
-        Emoji: e.target.emoji.value,
+        Emoji: [e.target.emojiA.value, e.target.emojiB.value, e.target.emojiC.value],
         Giph: e.target.giph.value,
         Id: e.target.idn.value,
+        Author: e.target.author.value
     };
 
     const options = { 
@@ -63,6 +68,21 @@ function submitComment(e){
 };
 
 
+function deletePost(e){
+    e.preventDefault();
+
+    fetch(`http://localhost:5000/posts/${e.target.idn.value}`,{
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(error => console.log(error))
+    window.location.reload();
+}
+
 // helpers
 function appendPosts(posts){
     posts.forEach(appendPost);
@@ -77,6 +97,9 @@ function appendPost(postData){
 
 
 };
+
+
+
 
 // ********************************************
 
@@ -104,5 +127,6 @@ module.exports = {
     appendPost,
     getMessage,
     submitComment,
+    deletePost,
     renderMessage
 }

@@ -2,18 +2,17 @@ let fs = require('fs');
 let data = fs.readFileSync('./database/postdatabase.json');
 const postsData = JSON.parse(data);
 
-// const postsData = require('../database/postdatabase.json');
-
 class Comment{
     constructor(data){
         this.Title = data.Title;
+        this.Date = data.Date;
         this.Text = data.Text;
         this.Emoji = data.Emoji;
         this.Giph = data.Giph;
+        this.Author = data.Author;
     }
 
 }
-
 
 class Post extends Comment {
 
@@ -30,7 +29,7 @@ class Post extends Comment {
 
     static findById(id) {
         try {
-            const postData = postsData.filter((post) => post.id === id)[0];
+            const postData = postsData.filter((post) => post.Id === id)[0];
             const post = new Post(postData);
             return post;
         } catch (err) {

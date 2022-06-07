@@ -6,22 +6,11 @@ const Post = require('../models/post');
 router.get('/', (req, res) => {
     const postsData = Post.allPosts;
     // 
-    for(const el in postsData){
-        console.log(postsData[el]);
-    }
+    // for(const el in postsData){
+    //     console.log(postsData[el]);
+    // }
     res.send(postsData);
 });
-
-// router.get('/:id', (req, res) => {
-//     try {
-//         const postId = parseInt(req.params.id);
-//         const selectedPost = Post.findById(postId);
-//         res.send(selectedPost);
-//     } catch (err) {
-//         console.log(err);
-//         res.status(404).send(err);
-//     }
-// });
 
 router.post('/Comment', (req, res) => {
     const data = req.body;
@@ -40,6 +29,7 @@ router.post('/Add', (req, res) => {
 
 router.delete('/:id', (req, res) => {
     const postId = parseInt(req.params.id);
+    console.log("I am Here and ID Number is: " + postId)
     const postToDestroy = Post.findById(postId);
     postToDestroy.destroy();
     res.status(204).send();
