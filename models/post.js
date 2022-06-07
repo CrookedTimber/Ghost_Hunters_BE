@@ -1,5 +1,8 @@
-const postsData = require('../data');
+let fs = require('fs');
+let data = fs.readFileSync('./database/postdatabase.json');
+const postsData = JSON.parse(data);
 
+// const postsData = require('../database/postdatabase.json');
 
 class Comment{
     constructor(data){
@@ -8,6 +11,7 @@ class Comment{
         this.Emoji = data.Emoji;
         this.Giph = data.Giph;
     }
+
 }
 
 
@@ -21,10 +25,6 @@ class Post extends Comment {
 
     static get allPosts(){
         const posts = postsData.map((post) => new Post(post));
-        // for(const el in posts){
-        //     (posts[el] = new Post(posts[el]));
-        //    // console.log(posts[el]);
-        // }
         return posts;
     }
 
@@ -40,22 +40,21 @@ class Post extends Comment {
 
     static createPost(post) {
         const newPostId = postsData.length + 1;
-        const newPost = new Post({ id: newPostId, ...post});
+        post.Id = newPostId;
+        const newPost = new Post({...post});
         postsData.push(newPost);
         return newPost;
     }
 
-    static createComment(post, id) {
-        const newComment = new Comment({ ...post});
-        postsData[id].Comments.push(newComment);
+    static createComment(post) {
+        const newComment = new Comment({...post});
+        postsData[post.Id].Comments.push(newComment);
         return newComment;
     }
 
     destroyPost(){
         const post = postsData.filter((post) => post.id === this.id)[0];
         postsData.splice(postsData.indexOf(post), 1);
-
-
     }
 
     destroyComment(id){
@@ -67,5 +66,6 @@ class Post extends Comment {
     }
 
 }
+
 
 module.exports = Post;
