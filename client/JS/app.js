@@ -45,7 +45,7 @@ function submitComment(e){
         Title: e.target.title.value,
         Date: e.target.date.value,
         Text: e.target.article.value,
-        Emoji: [e.target.emojiA.value, e.target.emojiB.value, e.target.emojiC.value],
+        Emoji: e.target.emoji.value,
         Giph: e.target.giph.value,
         Id: e.target.idn.value,
         Author: e.target.author.value
@@ -71,7 +71,30 @@ function submitComment(e){
 function deletePost(e){
     e.preventDefault();
 
-    fetch(`http://localhost:5000/posts/${e.target.idn.value}`,{
+    console.log("Deleting");
+
+    const ID = e.target.idn.value;
+
+    fetch(`http://localhost:5000/posts/deletepost/${ID}`,{
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(error => console.log(error))
+    window.location.reload();
+}
+
+function deleteComm(e){
+    e.preventDefault();
+
+    console.log("Deleting");
+
+    const ID = e.target.idnc.value;
+
+    fetch(`http://localhost:5000/posts/deletecomment/${ID}`,{
         method: "DELETE",
         headers: {
             "Content-Type": "application/json"
@@ -128,5 +151,6 @@ module.exports = {
     getMessage,
     submitComment,
     deletePost,
+    deleteComm,
     renderMessage
 }

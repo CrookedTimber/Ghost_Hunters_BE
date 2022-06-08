@@ -5,41 +5,55 @@ const Post = require('../models/post');
 
 router.get('/', (req, res) => {
     const postsData = Post.allPosts;
-    // 
-    // for(const el in postsData){
-    //     console.log(postsData[el]);
-    // }
-    res.send(postsData);
+    res.send(JSON.stringify(postsData, null ,2));
 });
 
 router.post('/Comment', (req, res) => {
     const data = req.body;
-    const newPost = Post.createComment(data);
-    saveData(data, 'Comment');
+    const localPostId = data.Id;
+    const newPost = Post.createComment(data, localPostId);
+    saveData(data, localPostId, 'Comment');
     res.status(201).send(newPost);
 });
 
 router.post('/Add', (req, res) => {
     const data = req.body;
     const newPost = Post.createPost(data);
-    saveData(data, 'Post');
+    saveData(data, data.Id, 'Post');
     res.status(201).send(newPost);
 
 });
 
-router.delete('/:id', (req, res) => {
-    const postId = parseInt(req.params.id);
-    console.log("I am Here and ID Number is: " + postId)
-    const postToDestroy = Post.findById(postId);
-    postToDestroy.destroy();
+router.delete('/deletepost/:id', (req, res) => {
+    const globalPostId =  parseInt(req.params.id);
+    console.log("I am Here and ID Number is: " + globalPostId)
+    const postToDestroy = Post.findPostById(globalPostId);
+    postToDestroy.destroyPost();
+    saveData(postToDestroy, globalPostId, "DeletePost")
+    res.status(204).send();
+
+});
+
+router.delete('/deletecomment/:id', (req, res) => {
+    const post_Comm_Id = req.params.id;
+
+    const globalPostId = parseInt( post_Comm_Id.toString().split("-")[0]);
+    const localCommId = parseInt( post_Comm_Id.toString().split("-")[1]);
+
+    console.log("globalPostId: " + globalPostId + " comment ID: " + localCommId);
+    const commentToDestroy = Post.findCommentById(globalPostId, localCommId);
+
+    commentToDestroy.destroyComment(globalPostId,localCommId);
+    saveData(commentToDestroy, post_Comm_Id, "DeleteComment")
     res.status(204).send();
 
 });
 
 
-function saveData(data, section){
+function saveData(data, localPostId, section){
     let newData = null;
     let arr = null;
+
     try {
         const mainData = fs.readFileSync('database/postdatabase.json');
         newData = JSON.parse(mainData);
@@ -51,15 +65,27 @@ function saveData(data, section){
         console.log("i am a comment");
         // getting the array of comments from the posts
         // Targeting Comments Part
-        arr = newData[data.Id].Comments;
+        newData[localPostId].Comments.push(data);
         // and pushing the new data to the targeted array'
-        arr.push(data);
-        // assign the array in the posts to updated versdion
-        newData[data.Id].Comments = arr;
-    }else{
-        // Targeting Posts Part
+        // arr.push(data);
+        // // assign the array in the posts to updated versdion
+        // newData[localPostId].Comments = arr;
+    }else if(section === 'Post'){
         arr = newData;
         arr.push(data);
+    }else if(section === 'DeletePost' ){
+        // Targeting Posts Part
+        arr = newData[localPostId - 1];
+        newData.splice(newData.indexOf(arr), 1); 
+
+    }else if(section === 'DeleteComment' ){
+        const globalPostId = parseInt( localPostId.toString().split("-")[0]);
+        const localCommId = parseInt( localPostId.toString().split("-")[1]);
+
+        // Targeting Comments Part
+        arr = newData[globalPostId - 1].Comments;
+
+        arr.splice(localCommId - 1, 1); 
     }
     
     
