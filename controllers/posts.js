@@ -16,6 +16,14 @@ router.post('/Comment', (req, res) => {
     res.status(201).send(newPost);
 });
 
+
+router.post('/emojiReaction', (req,res) => {
+    const data = req.body;
+    console.log(data);
+    res.status(201).send(data);
+    saveData(data, data.post, 'Reaction');
+});
+
 router.post('/Add', (req, res) => {
     const data = req.body;
     const newPost = Post.createPost(data);
@@ -65,11 +73,8 @@ function saveData(data, localPostId, section){
         console.log("i am a comment");
         // getting the array of comments from the posts
         // Targeting Comments Part
-        newData[localPostId].Comments.push(data);
-        // and pushing the new data to the targeted array'
-        // arr.push(data);
-        // // assign the array in the posts to updated versdion
-        // newData[localPostId].Comments = arr;
+        newData[localPostId-1].Comments.push(data);
+
     }else if(section === 'Post'){
         arr = newData;
         arr.push(data);
@@ -86,6 +91,12 @@ function saveData(data, localPostId, section){
         arr = newData[globalPostId - 1].Comments;
 
         arr.splice(localCommId - 1, 1); 
+    }else if(section === 'Reaction'){
+
+        console.log(localPostId);
+        // Targeting Emoji Part
+        arr = newData[localPostId - 1].Emoji;
+        arr[data.emoji] += 1;
     }
     
     

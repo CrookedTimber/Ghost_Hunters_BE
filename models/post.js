@@ -43,16 +43,15 @@ class Comment{
     static createPost(post) {
         const newPostId = postsData.length + 1;
         post.Id = newPostId;
-        
         const newPost = new Post({...post});
         postsData.push(newPost);
         return newPost;
     }
 
     static createComment(post, localPostId) {
-        post.Id = postsData[localPostId].Comments.length + 1;
+        post.Id = postsData[localPostId - 1].Comments.length + 1;
         const newComment = new Comment({...post});
-        postsData[localPostId].Comments.push(newComment);
+        postsData[localPostId -1].Comments.push(newComment);
         return newComment;
     }
 
@@ -73,8 +72,36 @@ class Post extends Comment {
 
     constructor(data){
         super(data);
+        this.Type = data.Type;
         this.Comments = data.Comments;
+        this.Emoji = data.Emoji;      
     }
+
+}
+
+function createRandomUserName() {
+    let userCharacter = [
+        "a","b","c","d","e","f",
+        "g","h","i","j","k","l",
+        "m","n","o","p","q","r",
+        "s","t","u","v","w","x",
+        "y","z","A","B","C","D",
+        "E","F","G","H","I","J",
+        "K","L","M","N","O","P",
+        "Q","R","S","T","u","V",
+        "W","X","Y","Z","1","2",
+        "3","4","5","6","7","8",
+        "9","0"
+    ];
+
+    let userLength = 7
+    let username = [];
+
+    for (let r = 0; r < userLength; r++) {
+        let randomNumber = Math.floor(Math.random() * userCharacter.length);
+        username += userCharacter[randomNumber];
+    }
+    return username;
 
 }
 
