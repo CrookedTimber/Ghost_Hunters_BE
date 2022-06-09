@@ -15,8 +15,12 @@ class Comment{
 
 
     static get allPosts(){
-        const posts = postsData.map((post) => new Post(post));
-        return posts;
+        try{
+            const posts = postsData.map((post) => new Post(post));
+            return posts;
+        }catch{
+            throw new Error('Posts Could not be returned');
+        }  
     }
 
     static findPostById(id) {
@@ -41,29 +45,47 @@ class Comment{
     }
 
     static createPost(post) {
-        const newPostId = postsData.length + 1;
-        post.Id = newPostId;
-        const newPost = new Post({...post});
-        postsData.push(newPost);
-        return newPost;
+        try{
+            const newPostId = postsData.length + 1;
+            post.Id = newPostId;
+            const newPost = new Post({...post});
+            postsData.push(newPost);
+            return newPost;
+        }catch(err){
+            throw new Error('Post Could not be created');
+        }
+        
     }
 
     static createComment(post, localPostId) {
-        post.Id = postsData[localPostId - 1].Comments.length + 1;
-        const newComment = new Comment({...post});
-        postsData[localPostId -1].Comments.push(newComment);
-        return newComment;
+        try{
+            post.Id = postsData[localPostId - 1].Comments.length + 1;
+            const newComment = new Comment({...post});
+            postsData[localPostId -1].Comments.push(newComment);
+            return newComment;
+        }catch{
+            throw new Error('Comment Could not be created');
+        }
+       
     }
 
     destroyPost(){
-        const post = postsData.filter((post) => post.Id === this.id)[0];
-        postsData.splice(postsData.indexOf(post), 1);
+        try{
+            const post = postsData.filter((post) => post.Id === this.id)[0];
+            postsData.splice(postsData.indexOf(post), 1);
+        }catch{
+            throw new Error('Post could not be destroyed');
+        }
     }
 
     destroyComment(globalPostId, localCommId){
-        // Array Starts Index 0
-        postsData[globalPostId-1].Comments.splice(localCommId - 1, 1);
-        console.log("Destroyed");
+        try{
+            postsData[globalPostId-1].Comments.splice(localCommId - 1, 1);
+            console.log("Destroyed");
+        }catch{
+            throw new Error('Comment could not be destroyed');
+        }
+        
     }
 
 }
@@ -74,7 +96,7 @@ class Post extends Comment {
         super(data);
         this.Type = data.Type;
         this.Comments = data.Comments;
-        this.Emoji = data.Emoji;      
+        this.Emoji = data.Emoji; 
     }
 
 }
