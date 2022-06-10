@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const stories = require('../database/storyData');
 
 const app = express();
 app.use(express.json())
@@ -15,6 +16,16 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
     res.status(405).send('Not allowd!');
+});
+
+app.get('/stories/random', (req, res) => {
+    function getRandomStory () {
+      for (let i = 0; i < stories.length; i++) {
+      const randomStory = stories[Math.floor(Math.random() * stories.length)]
+      return randomStory
+      }
+    }
+      res.send(getRandomStory())
 });
 
 module.exports = app;

@@ -10,9 +10,9 @@ router.get('/', (req, res) => {
 
 router.post('/Comment', (req, res) => {
     const data = req.body;
-    const localPostId = data.Id;
-    const newPost = Post.createComment(data, localPostId);
-    saveData(data, localPostId, 'Comment');
+    //const localPostId = data.Id;
+    const newPost = Post.createComment(data, data.Id);
+    saveData(data, data.Id, 'Comment');
     res.status(201).send(newPost);
 });
 
