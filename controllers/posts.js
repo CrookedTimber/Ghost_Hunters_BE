@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     res.send(JSON.stringify(postsData, null ,2));
 });
 
-router.post('/Comment/', (req, res) => {
+router.post('/Comment', (req, res) => {
     const data = req.body;
     //const localPostId = data.Id;
     const newPost = Post.createComment(data, data.Id);
@@ -17,14 +17,14 @@ router.post('/Comment/', (req, res) => {
 });
 
 
-router.post('/emojiReaction/', (req,res) => {
+router.post('/emojiReaction', (req,res) => {
     const data = req.body;
     console.log(data);
     res.status(201).send(data);
     saveData(data, data.post, 'Reaction');
 });
 
-router.post('/Add/', (req, res) => {
+router.post('/Add', (req, res) => {
     const data = req.body;
     const newPost = Post.createPost(data);
     saveData(data, data.Id, 'Post');
@@ -32,7 +32,7 @@ router.post('/Add/', (req, res) => {
 
 });
 
-router.delete('/deletepost/:id/', (req, res) => {
+router.delete('/deletepost/:id', (req, res) => {
     const globalPostId =  parseInt(req.params.id);
     console.log("I am Here and ID Number is: " + globalPostId)
     const postToDestroy = Post.findPostById(globalPostId);
@@ -42,7 +42,7 @@ router.delete('/deletepost/:id/', (req, res) => {
 
 });
 
-router.delete('/deletecomment/:id/', (req, res) => {
+router.delete('/deletecomment/:id', (req, res) => {
     const post_Comm_Id = req.params.id;
 
     const globalPostId = parseInt( post_Comm_Id.toString().split("-")[0]);
