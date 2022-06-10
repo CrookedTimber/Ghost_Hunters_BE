@@ -30,5 +30,6 @@ const stories = [
     `" I can't move, breathe, speak or hear and it's so dark all day round. "`,
     `" I saw a severed arm in the dumpster. It gave me a thumbs up when I walked by. "`
   ];
-​
+
+
   module.exports = stories;

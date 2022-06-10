@@ -1,12 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-const stories = require('../database/storyData');
-
 const app = express();
 app.use(express.json())
 app.use(cors());
 
 const postRoutes = require('../controllers/posts');
+const stories = require('../database/storyData');
 
 app.use('/posts', postRoutes);
 
