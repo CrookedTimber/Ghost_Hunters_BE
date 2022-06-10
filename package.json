@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "start": " node ./scripts/index.js",
+    "start": "node ./scripts/index.js",
     "dev": "nodemon ./scripts/index.js",
     "test": "jest --silent --watchAll",
     "coverage": "jest --coverage --silent"
