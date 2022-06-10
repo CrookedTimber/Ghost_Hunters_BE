@@ -7,7 +7,7 @@ app.use(cors());
 const postRoutes = require('../controllers/posts');
 const stories = require('../database/storyData');
 
-app.use('/posts/', postRoutes);
+app.use('/posts', postRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello there Ghost hunters!');
@@ -17,7 +17,7 @@ app.post('/', (req, res) => {
     res.status(405).send('Not allowd!');
 });
 
-app.get('/stories/random/', (req, res) => {
+app.get('/stories/random', (req, res) => {
     function getRandomStory () {
       for (let i = 0; i < stories.length; i++) {
       const randomStory = stories[Math.floor(Math.random() * stories.length)]
