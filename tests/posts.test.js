@@ -6,13 +6,13 @@ describe('API endpoints', () => {
 
     let api
     beforeAll(() => {
-        api = server.startServer(5000, 'localhost', 'Test server running on port 5000');
+        api = server.listen(5000, 'localhost', 'Test server running on port 5000');
     });
 
-    afterAll(done => {
-        console.log('stopping test server');
-        api.close(done)
-    })
+    // afterAll(done => {
+    //     console.log('stopping test server');
+    //     api.close(done)
+    // })
 
     it('responds to /', done => {
         request(api)
@@ -26,10 +26,16 @@ describe('API endpoints', () => {
             .expect(200, done);
     });
 
+    it('responds to POST /', done => {
+        request(api)
+            .post('/')
+            .expect(405, done);
+    });
+
     it('responds to DELETE /posts', done => {
         request(api)
             .delete('/posts')
-            .expect(204, done);
+            .expect(404, done);
     });
 
     it('404 everything else', done => {
@@ -37,12 +43,5 @@ describe('API endpoints', () => {
             .get('/bob')
             .expect(404, done);
     });
-
-
-    // test('Test Function', () =>{
-    //     expect(function()).toBe(true);
-    // })
-
-
 
 });
